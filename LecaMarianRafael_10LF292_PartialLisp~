@@ -9,7 +9,7 @@
 ; listMin(l1, ..., ln, min) = {
 ;                               min, l = null
 ;                               min(listMin(l1, min), listMin(l2, ..., ln, min)), listp(l1) = true
-;                               min = min(l1, listMin(l2, ..., ln, min)), l1 < min
+;                               min = min(l1, listMin(l2, ..., ln, min)), l1 > min
 ;                               listMin(l2, ..., ln, min), otherwise
 ;                               
 ;                             }
@@ -23,7 +23,7 @@
 (defun addAfterMin (l e min)
   (cond 
    ((null l) nil)
-   ((listp (car l)) (cons (addAfterMin (car l) e min) (addAfterMin (cdr l) e min)))
+   ((listp (car l)) (append (addAfterMin (car l) e min) (addAfterMin (cdr l) e min)))
    ((= (car l) min) (append (list(car l)) (append (list e) (addAfterMin (cdr l) e min))))
    (t (append (list(car l)) (addAfterMin (cdr l) e min))) 
   )
