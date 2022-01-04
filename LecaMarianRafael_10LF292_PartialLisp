@@ -1,0 +1,53 @@
+;Student: Leca Marian-Rafael
+;Grupa: 10LF292
+;Enunt: Dupa minimul unei liste neliniare sa se adauge un element e, dat ca parametru.
+;Exemplu: Input: (1 2 3 1 4 5), e=13.
+;Output: (1 13 2 3 1 13 4 5).
+;
+;
+;Model:
+; listMin(l1, ..., ln, min) = {
+;                               min, l = null
+;                               min(listMin(l1, min), listMin(l2, ..., ln, min)), listp(l1) = true
+;                               min = min(l1, listMin(l2, ..., ln, min)), l1 > min
+;                               listMin(l2, ..., ln, min), otherwise
+;                               
+;                             }
+; addAfterMin(l1, ..., ln, e, min) = {
+;                                 nil, l = null
+;                                 addAfterMin(l1) U addAfterMin(l2, ..., ln), listp(l1) = true
+;                                 l1 U e U addAfterMin(l2, ..., ln), l1 = min,
+;                                 l1 U addAfterMin(l2, ..., ln), otherwise
+;                               }
+
+(defun addAfterMin (l e min)
+  (cond 
+   ((null l) nil)
+   ((listp (car l)) (append (addAfterMin (car l) e min) (addAfterMin (cdr l) e min)))
+   ((= (car l) min) (append (list(car l)) (append (list e) (addAfterMin (cdr l) e min))))
+   (t (append (list(car l)) (addAfterMin (cdr l) e min))) 
+  )
+)
+
+
+(defun listMin (l min)
+ (cond 
+   ((null l) min)
+   ((listp (car l)) (min (listMin (car l) min) (listMin (cdr l) min)))
+   ((< (car l) min) (setq min (car l)) (listMin (cdr l) min))
+   (t (listMin (cdr l) min))
+ )
+
+)
+
+(defun problem(l e)
+ (addAfterMin l e (listMin l 100000))
+)
+
+
+(defun testCases()
+  (write (problem '(1 2 3 (0 1 2) 1 4 5) 13))
+  (write (problem '(1 2 3 (1 1 2) 1 4 5) 13))
+   (problem '(1 2 3 1 4 5) 13)
+
+)
